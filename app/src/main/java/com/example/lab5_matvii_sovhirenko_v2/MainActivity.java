@@ -8,9 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +33,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void LoadData(View view) {
-        this.statusTV.setText("Loading data.. ");
+        statusTV.setText("Loading currency for USD");
+        getDataByAsyncTask();
     }
 
+    public void LoadSpecificData(View view) {
+        String searchText = searchET.getText().toString().trim();
+        if (!searchText.isEmpty()) {
+            String currencyToSearch = searchText.toUpperCase();
+            new DataLoader() {
+                @Override
+                protected void onPostExecute(String result) {
+                    if (!result.isEmpty()) {
+                        statusTV.setText("Found currency: " + currencyToSearch + "\n" + result);
+                    } else {
+                        statusTV.setText("Currency not found: " + currencyToSearch);
+                    }
+                }
+            }.execute(ConstantLinks.FLOATRATES_API_URL, currencyToSearch);
+        } else {
+            statusTV.setText("Please enter a currency to search");
+        }
+    }
+
+
+    public void getDataByAsyncTask(){
+        new DataLoader() {
+            @Override
+            public void onPostExecute(String result) {
+                statusTV.setText("Loaded data for USD currency: \n" + result);
+            }
+        }.execute(ConstantLinks.FLOATRATES_API_URL);
+    }
 }
