@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.lab5_matvii_sovhirenko_v2"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.lab5_matvii_sovhirenko_v2"
